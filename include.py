@@ -21,10 +21,10 @@ includes = list(map(lambda s: s.strip("/"), includes))
 print('Creating backup:', realsync+'.bak')
 os.system('cp {} {}'.format(realsync, realsync+'.bak'))
 
-for _, folders, _ in os.walk('.'):
+for _, folders, files in os.walk('.'):
     break
 
-excludes = [f for f in folders if f not in includes]
+excludes = [f for f in (folders + files) if f not in includes]
 
 with open(realsync, 'r') as f:
     contents = f.readlines()
