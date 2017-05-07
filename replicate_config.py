@@ -11,6 +11,8 @@ if len(sys.argv) < 2:
     sys.exit(1)
 
 assert os.path.exists('.realsync')
+os.system('cp .realsync .realsync1')
+print('Original .realsync copied to .realsync1')
 
 def prompt(msg):
     ans = input(msg)
