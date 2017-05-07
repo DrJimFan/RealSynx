@@ -20,7 +20,10 @@ assert os.path.exists('.realsync')
 fnames = []
 for fname in os.listdir('.'):
     if fname.startswith('.realsync') and fname != '.realsync':
-        fnames.append(int(fname[len('.realsync'):]))
+        try:
+            fnames.append(int(fname[len('.realsync'):]))
+        except ValueError:
+            print(fname, 'does not end with int. Skip.')
 fnames.sort()
 
 if not fnames:
