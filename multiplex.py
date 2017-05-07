@@ -5,18 +5,27 @@ Start multi realsync with .realsync1 ... .realsync<n>
 import os
 import sys
 import shlex
+import argparse
 
-session = 'realsync'
+parser = argparse.ArgumentParser()
+parser.add_argument('session', nargs='?', default='realsync', help='tmux session name')
+parser.add_argument('--kill', nargs='?', default='no', help='kill the tmux session, default kill session="realsync"')
+args = parser.parse_args()
 
-if len(sys.argv) == 2:
-    if sys.argv[1] in ['h', 'help', '-h', '--help']:
-        print(sys.argv[0], '<session-name>, defaults to "realsync"')
+def prompt(msg):
+    ans = input(msg)
+    if ans.lower() in ['n', 'q']:
         sys.exit(1)
-    else:
-        session = sys.argv[1]
+
+if args.kill != 'no':
+    session = 'realsync' if args.kill is None else args.kill
+    prompt('Are you sure to kill session "{}"? '.format(session))
+    os.system('tmux kill-session -t ' + session)
+    print('session "{}" killed'.format(session))
+    sys.exit()
+session = args.session
 
 assert os.path.exists('.realsync')
-
 fnames = []
 for fname in os.listdir('.'):
     if fname.startswith('.realsync') and fname != '.realsync':
@@ -33,7 +42,7 @@ if not fnames:
 for fname in fnames:
     print('Found replica config file:', '.realsync'+str(fname))
 
-input('Start realsync multiplexer with tmux session "{}"? '.format(session))
+prompt('Start realsync multiplexer with tmux session "{}"? '.format(session))
 
 def sys_run(cmd, dry=0):
     print(cmd)
