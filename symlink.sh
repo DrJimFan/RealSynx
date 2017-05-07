@@ -12,3 +12,4 @@ ln -s $DIR/realsync4 $BIN/realsync4
 ln -s $DIR/include.py $BIN/realsync-include
 ln -s $DIR/replicate_config.py $BIN/realsync-replicate
 ln -s $DIR/multiplex.py $BIN/realsyncx
+ln -s $DIR/multiplex.py $BIN/realsync-multiplex
