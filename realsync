@@ -54,6 +54,8 @@ my $HOOKS =
     || 'Realsync::Generic';
 my %PENDING: shared = ();
 
+my $chdir;
+my $SUFFIX;
 
 #
 # Does everything,
@@ -66,12 +68,20 @@ sub main {
         eval("sub { $REM_SCRIPT }"); die $@ if $@;
 
         # If an argument is passed, chdir to that directory. Else use the current one.
-        my $chdir = $ARGV[0];
+        if (scalar @ARGV == 2) {
+            $SUFFIX = $ARGV[0];
+            $chdir = $ARGV[1];
+            $REALSYNC_SPEC_FILE = $REALSYNC_SPEC_FILE . $SUFFIX;
+        } else {
+            $SUFFIX = "";
+            $chdir = $ARGV[0];
+        }
+        print "REALSYNC spec file: ", $REALSYNC_SPEC_FILE, "\n";
         if (!defined $chdir && -f $REALSYNC_SPEC_FILE) {
             $chdir = ".";
         }
         if (!defined $chdir) {
-            die "Usage:\n  realsync SOURCE_DIRECTORY_WHICH_IS_REPLICATED\n";
+            die "Usage:\n  realsync" .$SUFFIX . " SOURCE_DIRECTORY_WHICH_IS_REPLICATED\n";
         }
         chdir($chdir) or die "Cannot set current directory to $chdir: $!\n";
 
@@ -194,9 +204,12 @@ sub build_pathes_based_on_cwd {
 #
 sub build_pathes_based_on_cwd_legacy {
     my ($dir_appdata, $is_tmp) = @_;
-    $DIR_PRIVATE = $dir_appdata . "/$REALSYNC_SPEC_FILE/" . substr(md5_hex(getcwd()), 0, 10);
+    # $DIR_PRIVATE = $dir_appdata . "/$REALSYNC_SPEC_FILE/" . substr(md5_hex(getcwd()), 0, 10);
+    $DIR_PRIVATE = $dir_appdata . "/.realsync/" . substr(md5_hex(getcwd()), 0, 10);
+    print "PRIVATE dir", $DIR_PRIVATE, "\n";
     $DIR_PRIVATE .= ".tmp" if $is_tmp;
-    $FILE_CONFIG = "$DIR_PRIVATE/realsync.ini";
+    $FILE_CONFIG = "$DIR_PRIVATE/realsync" . $SUFFIX . ".ini";
+    print 'PRIVATE file config location: ', $FILE_CONFIG, "\n";
     $FILE_IDENTITY = "$DIR_PRIVATE/.ssh/identity";
 }
 

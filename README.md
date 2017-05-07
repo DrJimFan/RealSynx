@@ -1,11 +1,16 @@
-dkLab RealSync: replicate developer's files over SSH in realtime
+RealSync modified
 =====
 
-Developed by _Dmitry Koterov, http://en.dklab.ru/lib/dklab_realsync/ (C)_
+## Modifications
 
-License: GPL
+To start realsync as default: `.realsync <folder>`
+
+To start multiple realsync for the same dir, `.realsync <n> <folder>`. 
+This is useful when you want to sync the same source folder to multiple remotes locations.
 
 ## What it is
+
+Developed by _Dmitry Koterov, http://en.dklab.ru/lib/dklab_realsync/ 
 
 RealSync allows you to establish a one-way synchronization between a local folder and a server's remote directory. The typical use case is to sync your local copy of a website's source code with the development server. The sync is kept over time, and happens in real-time.
 
