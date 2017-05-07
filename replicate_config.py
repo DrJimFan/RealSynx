@@ -7,10 +7,20 @@ import os
 import sys
 
 if len(sys.argv) < 2:
-    print(sys.argv[0], '<file_of_host_name>')
+    print(sys.argv[0], '<file_of_host_name> or "clear"')
     sys.exit(1)
 
 assert os.path.exists('.realsync')
+
+def prompt(msg):
+    ans = input(msg)
+    if ans.lower() in ['n', 'q']:
+        sys.exit(1)
+
+if sys.argv[1] == 'clear':
+    prompt('Do you want to clear all .realsync<n>? ".realsync" itself will be preserved: ')
+    os.system("find . -regex './.realsync[0-9][0-9]*' -delete")
+    sys.exit(0)
 
 hosts = []
 for l in open(sys.argv[1]):
@@ -19,9 +29,7 @@ for l in open(sys.argv[1]):
         hosts.append(l)
         print(l)
 print('Creating', len(hosts), 'replicas.')
-ans = input('Ready? <enter>')
-if ans == 'n':
-    sys.exit(1)
+prompt('Ready? <enter>')
 
 content = open('.realsync').readlines()
 for hi, line in enumerate(content):
