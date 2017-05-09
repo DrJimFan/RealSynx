@@ -11,8 +11,8 @@ if len(sys.argv) < 2:
     sys.exit(1)
 
 assert os.path.exists('.realsync')
-os.system('cp .realsync .realsync1')
-print('Original .realsync copied to .realsync1')
+os.system('cp .realsync .realsync0')
+print('Original .realsync copied to .realsync0')
 
 def prompt(msg):
     ans = input(msg)
@@ -27,7 +27,7 @@ if sys.argv[1] == 'clear':
 hosts = []
 for l in open(sys.argv[1]):
     l = l.strip()
-    if l:
+    if l and not l.startswith('#'):
         hosts.append(l)
         print(l)
 print('Creating', len(hosts), 'replicas.')
@@ -39,8 +39,8 @@ for hi, line in enumerate(content):
         # hi stores the line number of the "host =" line
         break
 
-fi = 2
-for fi, host in enumerate(hosts, 2):
+fi = 1
+for fi, host in enumerate(hosts, 1):
     fname = '.realsync{}'.format(fi)
     with open(fname, 'w') as f:
         content[hi] = 'host = {}\n'.format(host)

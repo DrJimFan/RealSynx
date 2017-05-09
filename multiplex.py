@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Start multi realsync with .realsync1 ... .realsync<n>
+Start multi realsync with .realsync0 (original .realsync), .realsync1, ... .realsync<n>
 """
 import os
 import sys
@@ -9,7 +9,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('session', nargs='?', default='realsync', help='tmux session name')
-parser.add_argument('--kill', nargs='?', default='no', help='kill the tmux session, default kill session="realsync"')
+parser.add_argument('-k', '--kill', nargs='?', default='no', help='kill the tmux session, default kill session="realsync"')
 args = parser.parse_args()
 
 def prompt(msg):
