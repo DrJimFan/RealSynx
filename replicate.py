@@ -20,6 +20,7 @@ def prompt(msg):
         sys.exit(1)
 
 if sys.argv[1] == 'clear':
+    # TODO use user specified IDs
     prompt('Do you want to clear all .realsync<n>? ".realsync" itself will be preserved: ')
     os.system("find . -regex './.realsync[0-9][0-9]*' -delete")
     sys.exit(0)
