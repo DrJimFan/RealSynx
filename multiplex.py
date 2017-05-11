@@ -7,8 +7,6 @@ import sys
 import shlex
 import argparse
 
-DEBUG = 0
-
 parser = argparse.ArgumentParser()
 parser.add_argument('realsync_ids', nargs='?', default='all', help="""
                         'all': all ./realsync<n> configs
@@ -18,7 +16,13 @@ parser.add_argument('realsync_ids', nargs='?', default='all', help="""
                     """)
 parser.add_argument('-k', '--kill', nargs='?', default='no', help='kill the tmux session, default kill session="realsync"')
 parser.add_argument('-s', '--session', nargs='?', default='realsync', help='tmux session name')
+parser.add_argument('-d', '--dry-run', action='store_true')
 args = parser.parse_args()
+
+DEBUG = args.dry_run
+
+if DEBUG:
+    print('======= dry run =======')
 
 def prompt(msg):
     ans = input(msg)
@@ -96,4 +100,5 @@ for fname in fnames[1:]:
     sys_run('tmux new-window -t {} -n {} bash'.format(session, win(fname)))
 for fname in fnames:
     cmd = 'realsync {} .'.format(fname)
-    sys_run('tmux send-keys -t {}:{} {} Enter'.format(session, win(fname), shlex.quote(cmd)))
+    # two enters to start replication on realsync prompt
+    sys_run('tmux send-keys -t {}:{} {} Enter Enter'.format(session, win(fname), shlex.quote(cmd)))
