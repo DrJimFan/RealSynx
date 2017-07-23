@@ -67,15 +67,16 @@ sub main {
         # Make remote script's subs available.
         eval("sub { $REM_SCRIPT }"); die $@ if $@;
 
-        # If an argument is passed, chdir to that directory. Else use the current one.
         if (scalar @ARGV == 2) {
             $SUFFIX = $ARGV[0];
             $chdir = $ARGV[1];
-            $REALSYNC_SPEC_FILE = $REALSYNC_SPEC_FILE . $SUFFIX;
+            # put multiplexed config inside .realsynx/ folder
+            $REALSYNC_SPEC_FILE = '.realsynx/' . $REALSYNC_SPEC_FILE . $SUFFIX;
         } else {
             $SUFFIX = "";
             $chdir = $ARGV[0];
         }
+        # If an argument is passed, chdir to that directory. Else use the current one.
         print "REALSYNC spec file: ", $REALSYNC_SPEC_FILE, "\n";
         if (!defined $chdir && -f $REALSYNC_SPEC_FILE) {
             $chdir = ".";
