@@ -13,4 +13,3 @@ ln -fs $DIR/include.py $BIN/realsynx-include
 ln -fs $DIR/replicate.py $BIN/realsynx-replicate
 ln -fs $DIR/multiplex.py $BIN/realsyncx
 ln -fs $DIR/multiplex.py $BIN/realsynx
-ln -fs $DIR/multiplex.py $BIN/realsynx-multiplex

@@ -6,6 +6,8 @@ RealSync modified
 To start realsync as default: `.realsync <folder>`
 
 To start multiple realsync for the same dir, `.realsync <n> <folder>`. 
+The config file should be located at `.realsynx/.realsync<n>`.
+
 This is useful when you want to sync the same source folder to multiple remotes locations.
 
 ## What it is

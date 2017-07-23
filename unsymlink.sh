@@ -7,6 +7,7 @@ read ans
 
 if [ "$ans" == "y" ]; then
     rm -f $BIN/realsync*
+    rm -f $BIN/realsynx*
     echo 'removed'
 else
     echo 'cancelled'
