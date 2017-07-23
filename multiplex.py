@@ -105,9 +105,12 @@ else: # user-specified ranges of id
         assert os.path.exists(f), '{} does not exist.'.format(f)
     
 
-for fname in fnames:
-    print('Found replica config file: .realsync'+str(fname))
-
+print('\nFound replica config file:')
+for i, fname in enumerate(fnames, 1):
+    print('.realsync{}\t'.format(fname), end='')
+    if i % 4 == 0 or i == len(fnames):
+        print()
+print()
 prompt('Start realsynx multiplexer with tmux session "{}"? '.format(session))
 
 def sys_run(cmd):
