@@ -50,6 +50,10 @@ TODO
 
 TODO
 
+### WARNING
+
+Sometimes Tmux doesn't respect SSH key configs. Even if you can login without a password on a regular terminal, in Tmux it still asks you for password. In that case, you can either use [this method](https://apple.stackexchange.com/questions/257107/ssh-under-tmux-always-asks-for-password) or just run `realsync <N> <folder>` directly in terminal.
+
 
 ## What it is
 
