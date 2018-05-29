@@ -33,13 +33,14 @@ my @SSH_OPTIONS = (
     "-o", "StrictHostKeyChecking=no",
 );
 my @RSYNC_OPTIONS = (
-    "-rltzxv",
+    "-rltzxvS",
     "--delete",
+    "--partial"
 );
 my @RSYNC_WRAPPER = ();
 my @RSYNC_SSH_WRAPPER = ();
-my $REALSYNC_SPEC_FILE = ".realsync4";
-my @DEFAULT_EXCLUDE = (".realsync*", "CVS", ".git", ".svn", ".hg", ".cache", ".idea", "nbproject", "~*", "*.tmp", "*.pyc", "*.swp");
+my $REALSYNC_SPEC_FILE = ".realsync";
+my @DEFAULT_EXCLUDE = ($REALSYNC_SPEC_FILE, "CVS", ".git", ".svn", ".hg", ".cache", ".idea", "nbproject", "~*", "*.tmp", "*.pyc", "*.swp");
 
 # Globals.
 my %CONFIG;
@@ -71,7 +72,7 @@ sub main {
             $chdir = ".";
         }
         if (!defined $chdir) {
-            die "Usage:\n  realsync (4th connection) SOURCE_DIRECTORY_WHICH_IS_REPLICATED\n";
+            die "Usage:\n  realsync SOURCE_DIRECTORY_WHICH_IS_REPLICATED\n";
         }
         chdir($chdir) or die "Cannot set current directory to $chdir: $!\n";
 
@@ -196,7 +197,7 @@ sub build_pathes_based_on_cwd_legacy {
     my ($dir_appdata, $is_tmp) = @_;
     $DIR_PRIVATE = $dir_appdata . "/$REALSYNC_SPEC_FILE/" . substr(md5_hex(getcwd()), 0, 10);
     $DIR_PRIVATE .= ".tmp" if $is_tmp;
-    $FILE_CONFIG = "$DIR_PRIVATE/realsync4.ini";
+    $FILE_CONFIG = "$DIR_PRIVATE/realsync.ini";
     $FILE_IDENTITY = "$DIR_PRIVATE/.ssh/identity";
 }
 
