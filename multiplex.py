@@ -120,9 +120,9 @@ def sys_run(cmd):
 
 # window names will be r3, r10, etc.
 win = 'r{:0>2d}'.format
-sys_run('tmux new-session -s {} -n {} -d bash'.format(session, win(fnames[0])))
+sys_run('tmux new-session -s {} -n {} -d'.format(session, win(fnames[0])))
 for fname in fnames[1:]:
-    sys_run('tmux new-window -t {} -n {} bash'.format(session, win(fname)))
+    sys_run('tmux new-window -t {} -n {}'.format(session, win(fname)))
 for fname in fnames:
     # our improved `realsync` script will recognize config files under .realsynx/ folder
     # e.g. `realsync 42` will find the file .realsynx/.realsync42
