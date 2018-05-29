@@ -1,18 +1,59 @@
-RealSync modified
+RealSynx
 =====
 
-## Modifications
+RealSynx enables multiplexed `realsync` that syncs to multiple destinations.
 
-To start realsync as default: `.realsync <folder>`
+```bash
+./install.sh  # creates symlinks
+```
 
-To start multiple realsync for the same dir, `.realsync <n> <folder>`. 
-The config file should be located at `.realsynx/.realsync<n>`.
+## Modifications to RealSync
 
-This is useful when you want to sync the same source folder to multiple remotes locations.
+You can still use the `realsync` executable with its old syntax: 
+ 
+```bash
+realsync [folder]
+```
+
+To start `realsync` to multiple remote destinations, you need the config file `.realsynx/.realsync<N>` inside the replicated folder. The spec file semantics is exactly the same as `.realsync` before.
+
+```bash
+realsync 2 [folder]  # requires folder/.realsynx/.realsync2
+realsync 5 [folder]  # requires folder/.realsynx/.realsync5
+...
+realsync 101 [folder]  # requires folder/.realsynx/.realsync101
+realsync 102 [folder]  # requires folder/.realsynx/.realsync102
+```
+
+Each connection will remember the SSH keys and save the info to `~/.realsynx/.realsync<N>`, so that you don't have to go through the setup wizard again. 
+
+
+## RealSynx tools
+
+To use Tmux for multiple realsync simultaneously, run
+
+```bash
+realsynx 2-5,101-103   # any combination of range and comma
+```
+
+This is equivalent to launching in parallel:
+```bash
+realsync 2 . && realsync 3 . && realsync 4 . && realsync 5 .
+&& realsync 101 . && realsync 102 . && realsync 103 .
+```
+
+### `realsynx-include`
+
+TODO
+
+### `realsynx-replicate`
+
+TODO
+
 
 ## What it is
 
-Developed by _Dmitry Koterov, http://en.dklab.ru/lib/dklab_realsync/ 
+Developed by Dmitry Koterov, http://en.dklab.ru/lib/dklab_realsync/ 
 
 RealSync allows you to establish a one-way synchronization between a local folder and a server's remote directory. The typical use case is to sync your local copy of a website's source code with the development server. The sync is kept over time, and happens in real-time.
 
