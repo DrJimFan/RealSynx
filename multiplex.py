@@ -81,7 +81,7 @@ def parse_nums(spec):
         raise ValueError('Invalid number spec. Example: 1-100^42^55,200-300,309')
 
 
-assert os.path.exists('.realsync')
+# assert os.path.exists('.realsync')
 assert os.path.exists('.realsynx/'), \
     '.realsynx/ dir must exist. Run `realsync-replicate` first'
 
