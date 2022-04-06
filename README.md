@@ -44,11 +44,15 @@ realsync 2 . && realsync 3 . && realsync 4 . && realsync 5 .
 
 ### `realsynx-include`
 
-TODO
+Generate the `exclude =` patterns in .realsync files by only including specified files and automatically excluding all others.
 
 ### `realsynx-replicate`
 
 TODO
+
+### Additional features
+
+* Supports `identity = <path/to/ssh/key/file>` in .realsync config file
 
 ### WARNING
 
