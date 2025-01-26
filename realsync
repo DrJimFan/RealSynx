@@ -250,7 +250,7 @@ sub do_rsync {
             "ssh",
             (-f $FILE_IDENTITY ? ("-i", $FILE_IDENTITY) : ()),
             split_cmd_args(cfg("ssh_options")),
-            "-p$h_port"
+            ($h_port ? ("-p$h_port") : ())
         ),
         split_cmd_args(cfg("rsync_options")),
         $HOOKS->convert_rsync_local_path(cfg("local")) . "/", # the trailing slash is significant!
@@ -288,12 +288,13 @@ sub do_run_ssh {
     my $rem_script = $REM_SCRIPT;
     $rem_script =~ s/!/@@/sg; # for tcsh
     my ($h_host, $h_port) = parse_host_spec(cfg("host"));
+    print "PORT NUMBER: $h_port\n"; 
     my @ssh_cmd = (
         "ssh",
         ($SSH_VERBOSE ? ("-v") : ()),
         (-f $FILE_IDENTITY ? ("-i", $FILE_IDENTITY) : ()),
         split_cmd_args(cfg("ssh_options")),
-        "-p$h_port",
+        ($h_port ? ("-p$h_port") : ()),
         cfg("user") . '@' . $h_host,
         # For TCSH we must NEVER insert "!" character into arguments, else it
         # breaks the program. So we previously replace "!" to "@@" and then,
@@ -429,14 +430,15 @@ sub do_install {
         # Check if we already have a passwordless access.
         print "Checking if we have access to $user\@$host with no password...\n";
         my ($h_host, $h_port) = parse_host_spec($host);
+        # print "PORT NUMBER: $h_port\n"; 
 
         # JIM modification: support `identity = ` config to specify the ssh key
         my $cmd_check = "";
         if ($CONFIG{identity}) {
             $FILE_IDENTITY = $CONFIG{identity};
-            $cmd_check = "ssh -q -o PasswordAuthentication=no -o BatchMode=yes -o StrictHostKeyChecking=no -i $FILE_IDENTITY -p$h_port $user\@$h_host exit";
+            $cmd_check = "ssh -q -o PasswordAuthentication=no -o BatchMode=yes -o StrictHostKeyChecking=no -i $FILE_IDENTITY" . ($h_port ? " -p$h_port" : "") . " $user\@$h_host exit";
         } else {
-            $cmd_check = "ssh -q -o PasswordAuthentication=no -o BatchMode=yes -o StrictHostKeyChecking=no  -p$h_port $user\@$h_host exit";
+            $cmd_check = "ssh -q -o PasswordAuthentication=no -o BatchMode=yes -o StrictHostKeyChecking=no" . ($h_port ? " -p$h_port" : "") . " $user\@$h_host exit";
         }
         print $cmd_check;
         if (system($cmd_check) == 0) {
@@ -466,7 +468,7 @@ sub do_install {
         # process'es STDERR till we read from STDIN (Win32 perl bug?).
         print "Copying SSH key to $user\@$host. Executing:\n";
         my $cmd = "ssh"
-            . " -o StrictHostKeyChecking=no -p$h_port $user\@$h_host\n"
+            . " -o StrictHostKeyChecking=no" . ($h_port ? " -p$h_port" : "") . " $user\@$h_host\n"
             . ' "cd; umask 077; test -d .ssh && chmod 700 .ssh || mkdir .ssh;'
             . ' test -e .ssh/authorized_keys && chmod 600 .ssh/authorized_keys; (echo; cat)'
             . ' >> .ssh/authorized_keys"';
@@ -498,7 +500,7 @@ sub do_install {
                     my ($h_host, $h_port) = parse_host_spec($host);
                     my $cmd = "ssh"
                         . (-f $FILE_IDENTITY ? " -i $FILE_IDENTITY" : "")
-                        . " -o StrictHostKeyChecking=no -p$h_port $user\@$h_host \"test -d $_\"";
+                        . " -o StrictHostKeyChecking=no" . ($h_port ? " -p$h_port" : "") . " $user\@$h_host \"test -d $_\"";
                     my $ret = system($cmd) >> 8;
                     if ($ret != 0) {
                         return "Directory $_ at $user\@$host does not exist. Try again.";
@@ -1033,7 +1035,7 @@ sub mask_to_re {
 #
 sub parse_host_spec {
     my ($host_port) = @_;
-    return $host_port =~ /^(.*):(\d+)$/s ? ($1, $2) : ($host_port, "22");
+    return $host_port =~ /^(.*):(\d+)$/s ? ($1, $2) : ($host_port, "");
 }
 
 
